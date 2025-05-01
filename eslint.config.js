@@ -15,6 +15,9 @@ export default [
       'no-undef': 'error',
       'no-console': 'off',
       'import/order': ['warn', { groups: [['builtin', 'external', 'internal']] }]
+    },
+    globals: {
+      console: 'readonly'
     }
   }
 ];
