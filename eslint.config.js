@@ -5,7 +5,10 @@ export default [
     files: ['src/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'module'
+      sourceType: 'module',
+      globals: {
+        console: 'readonly'
+      }
     },
     plugins: {
       import: eslintPluginImport
@@ -15,9 +18,6 @@ export default [
       'no-undef': 'error',
       'no-console': 'off',
       'import/order': ['warn', { groups: [['builtin', 'external', 'internal']] }]
-    },
-    globals: {
-      console: 'readonly'
     }
   }
 ];

@@ -36,6 +36,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.15.6",
     "pg-hstore": "^2.3.4",
+    "proyectobd2": "file:",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
