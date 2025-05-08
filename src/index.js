@@ -2,6 +2,10 @@ import dotenv from "dotenv";
 import app from "./app.js";
 import { initDB, sequelize } from "./db/index.js";
 import "./modules/users/users.model.js"; // importa modelos para sincronización
+import "./modules/restaurants/restaurants.model.js";
+import './modules/menus/menus.model.js';
+import './modules/reservations/reservations.model.js';
+import './modules/orders/orders.model.js';
 
 dotenv.config();
 

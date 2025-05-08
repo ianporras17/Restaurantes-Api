@@ -22,7 +22,6 @@ export const idUserModify = async (req, res) => {
 
     const {id} = req.params;
     const {email, password, role} = req.body;
-    console.log({ email, password, role });
 
     try{
         const usuario = await User.findByPk(id);
@@ -31,6 +30,11 @@ export const idUserModify = async (req, res) => {
             return res.status(404).json({error: "Usuario no encontrado"});
 
         }
+
+        if (role && req.user.role !== 'Admin') {
+            return res.status(403).json({ error: 'Sin permisos para cambiar role' });
+          }
+        
 
         if(email){
             usuario.email = email;
@@ -52,7 +56,12 @@ export const idUserModify = async (req, res) => {
             email: usuario.email,
             role: usuario.role
           }});
+          
     }catch(err){
+        if (err.name === "SequelizeUniqueConstraintError") {
+            return res.status(400).json({ error: "El correo ya está registrado" });
+        }
+        console.error(err);
         return res.status(500).json({error: "Error en el servidor"})
     }
 }
