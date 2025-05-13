@@ -27,6 +27,8 @@ jobs:
         run: npm ci
 
       - name: ✅ Run unit & integration tests
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: npm test -- --coverage
 
       - name: 📊 Upload coverage artifact
@@ -68,5 +70,3 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           echo "Imagen publicada: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-
-
