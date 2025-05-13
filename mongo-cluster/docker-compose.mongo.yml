@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  # ---------- SHARD 1 (ReplicaSet) ----------
+  mongo1:
+    image: mongo:6.0
+    container_name: mongo1
+    hostname: mongo1
+    ports: [ "27017:27017" ]
+    volumes:
+      - ./data/mongo1:/data/db
+      - ./init/rs-init.sh:/scripts/rs-init.sh:ro
+    command: >
+      bash -c "
+        mongod --replSet rs0 --shardsvr --port 27017 --bind_ip_all &
+        sleep 25 &&
+        bash /scripts/rs-init.sh || true &&
+        tail -f /dev/null
+      "
+    networks: [ mongo-cluster ]
+
+  mongo2:
+    image: mongo:6.0
+    container_name: mongo2
+    hostname: mongo2
+    ports: [ "27018:27017" ]
+    volumes:
+      - ./data/mongo2:/data/db
+    command: mongod --replSet rs0 --shardsvr --port 27017 --bind_ip_all
+    networks: [ mongo-cluster ]
+
+  mongo3:
+    image: mongo:6.0
+    container_name: mongo3
+    hostname: mongo3
+    ports: [ "27019:27017" ]
+    volumes:
+      - ./data/mongo3:/data/db
+    command: mongod --replSet rs0 --shardsvr --port 27017 --bind_ip_all
+    networks: [ mongo-cluster ]
+
+  # ---------- CONFIG SERVERS (ReplicaSet) ----------
+  configsvr1:
+    image: mongo:6.0
+    container_name: configsvr1
+    hostname: configsvr1
+    command: mongod --configsvr --replSet configReplSet --bind_ip_all --port 27021
+    ports: [ "27021:27021" ]
+    volumes:
+      - ./data/config1:/data/db
+    networks: [ mongo-cluster ]
+
+  configsvr2:
+    image: mongo:6.0
+    container_name: configsvr2
+    hostname: configsvr2
+    command: mongod --configsvr --replSet configReplSet --bind_ip_all --port 27021
+    ports: [ "27022:27021" ]
+    volumes:
+      - ./data/config2:/data/db
+    networks: [ mongo-cluster ]
+
+  configsvr3:
+    image: mongo:6.0
+    container_name: configsvr3
+    hostname: configsvr3
+    command: mongod --configsvr --replSet configReplSet --bind_ip_all --port 27021
+    ports: [ "27023:27021" ]
+    volumes:
+      - ./data/config3:/data/db
+    networks: [ mongo-cluster ]
+
+  # ---------- MONGOS ----------
+  mongos:
+    image: mongo:6.0
+    container_name: mongos
+    hostname: mongos
+    ports: [ "27020:27017" ]
+    command: >
+      bash -c "
+        sleep 20 &&
+        mongos --configdb configReplSet/configsvr1:27021,configsvr2:27021,configsvr3:27021 --bind_ip_all
+      "
+    depends_on: [ configsvr1, configsvr2, configsvr3 ]
+    networks: [ mongo-cluster ]
+
+  # ---------- FASE 1 : inicia configReplSet ----------
+  init-configsvr:
+    image: mongo:6.0
+    container_name: init-configsvr
+    depends_on: [ configsvr1, configsvr2, configsvr3 ]
+    volumes:
+      - ./init/init-configsvr.js:/scripts/init-configsvr.js:ro
+    entrypoint: >
+      bash -c "
+        echo '⏳ Esperando config servers...' &&
+        sleep 25 &&
+        echo '⚙️  Iniciando configReplSet...' &&
+        mongosh --host configsvr1:27021 /scripts/init-configsvr.js
+      "
+    networks: [ mongo-cluster ]
+
+  # ---------- FASE 2 : agrega shard y habilita sharding ----------
+  init-shard:
+    image: mongo:6.0
+    container_name: init-shard
+    depends_on: [ mongos, init-configsvr ]
+    volumes:
+      - ./init/shard-init.js:/scripts/shard-init.js:ro
+    entrypoint: >
+      bash -c "
+        echo '⏳ Esperando mongos esté listo...' &&
+        until mongosh --host mongos --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
+          echo '⌛ Aún esperando mongos...'; sleep 2;
+        done &&
+        echo '🚀 Ejecutando shard-init.js...' &&
+        mongosh --host mongos /scripts/shard-init.js
+      "
+    networks: [ mongo-cluster ]
+
+networks:
+  mongo-cluster:
+    driver: bridge
