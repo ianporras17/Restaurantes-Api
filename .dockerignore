@@ -4,3 +4,4 @@ Dockerfile
 docker-compose.yml
 package-lock.json
 .env
+.github
