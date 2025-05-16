@@ -82,4 +82,4 @@ docker pull ghcr.io/ianporras17/restaurantes-api:latest
 Puedes ver los resultados en:  
 👉 [https://github.com/ianporras17/Restaurantes-Api/actions](https://github.com/ianporras17/Restaurantes-Api/actions)
 
-
+Correcciones

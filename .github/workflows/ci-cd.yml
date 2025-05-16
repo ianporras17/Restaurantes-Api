@@ -12,6 +12,42 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6
+        ports:
+          - 27020:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: "false"
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        options: >-
+          --health-cmd="curl --silent --fail localhost:9200/_cluster/health || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -28,6 +64,7 @@ jobs:
       - name: ✅ Run unit & integration tests
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: npm test -- --coverage
 
       - name: 📊 Upload coverage artifact
@@ -42,6 +79,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
