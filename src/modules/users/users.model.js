@@ -1,24 +1,22 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../db/index.js";
 
-/* 
-    Se crea el modelo del usuario para la base de datos
-
-*/
-
-export const User = sequelize.define("User", {
+export let User;
+if (process.env.DB_ENGINE === "postgres") {
+  User = sequelize.define("User", {
     email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     password: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    role:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: "Cliente"  
+    role: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Cliente",
     },
-});
+  });
+}

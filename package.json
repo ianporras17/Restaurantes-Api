@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon --exec node --enable-source-maps src/index.js",
     "start": "node src/index.js",
-    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles",
-    "coverage": "npm test -- --coverage",
+    "test:pg": "cross-env NODE_ENV=test DB_ENGINE=postgres  jest --runInBand --detectOpenHandles --coverage --testPathPattern=tests/postgres",
+    "test:mongo": "cross-env NODE_ENV=test DB_ENGINE=mongo     MONGO_URI=mongodb://localhost:27020/restaurantes_test jest --runInBand --detectOpenHandles --coverage --testPathPattern=tests/mongo",
+    "test": "npm run test:pg && npm run test:mongo",
+    "coverage": "npm test",
     "lint": "eslint \"src/**/*.js\"",
     "prepare": "husky install"
   },
@@ -30,18 +32,21 @@
   },
   "homepage": "https://github.com/ianporras17/Restaurantes-Api#readme",
   "dependencies": {
+    "@elastic/elasticsearch": "^8.12.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.3",
     "pg": "^8.15.6",
     "pg-hstore": "^2.3.4",
     "proyectobd2": "file:",
+    "redis": "^5.0.1",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
-    "@babel/preset-env": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.25.1",
@@ -53,6 +58,6 @@
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "sqlite3": "^5.1.7",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.1"
   }
 }

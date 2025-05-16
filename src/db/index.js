@@ -1,18 +1,20 @@
 import { Sequelize } from "sequelize";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
 let sequelize;
+let mongoConn = null;
 
 if (process.env.NODE_ENV === "test") {
-  // En modo test: SQLite en memoria (no necesita Docker ni host externo)
+  // 🧪 Testing con SQLite en memoria
   sequelize = new Sequelize({
     dialect: "sqlite",
     storage: ":memory:",
     logging: false,
   });
-} else {
-  // En dev/prod: Postgres según tu .env
+} else if (process.env.DB_ENGINE === "postgres") {
+  // 🐘 PostgreSQL en dev/prod
   sequelize = new Sequelize({
     dialect: "postgres",
     host: process.env.DB_HOST,
@@ -22,7 +24,15 @@ if (process.env.NODE_ENV === "test") {
     database: process.env.DB_NAME,
     logging: false,
   });
+} else if (process.env.DB_ENGINE === "mongo") {
+  // 🍃 MongoDB conexión con mongoose
+  mongoConn = mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ Conectado a MongoDB"))
+  .catch((err) => console.error("❌ Error al conectar a MongoDB:", err));
 }
 
-export const initDB = () => sequelize.authenticate();
-export { sequelize };
+export const initDB = () => sequelize?.authenticate?.();
+export { sequelize, mongoConn };

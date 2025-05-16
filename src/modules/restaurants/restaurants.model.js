@@ -1,28 +1,23 @@
-import { sequelize } from "../../db/index.js";
 import { DataTypes } from "sequelize";
+import { sequelize } from "../../db/index.js";
 
-/* 
-    Se crea el modelo del restaurante para la base de datos
-
-*/
-
-export const Restaurant = sequelize.define("Restaurant", {
-    
+export let Restaurant;
+if (process.env.DB_ENGINE === "postgres") {
+  Restaurant = sequelize.define("Restaurant", {
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     address: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     phone: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     capacity: {
-        type: DataTypes.INTEGER
-    }
+      type: DataTypes.INTEGER,
     },
-);
-
+  });
+}

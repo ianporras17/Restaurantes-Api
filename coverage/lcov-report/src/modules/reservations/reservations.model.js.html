@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">16.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>1/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">16.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>1/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -102,23 +102,18 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,56 +133,73 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span></td><td class="text"><pre class="prettyprint lang-js">import { DataTypes } from "sequelize";
-import { sequelize }  from '../../db/index.js';
-import { User }       from '../users/users.model.js';
-import { Restaurant } from '../restaurants/restaurants.model.js';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DataTypes } from "sequelize";
+import { sequelize } from "../../db/index.js";
+import { User }       from "../users/users.model.js";
+import { Restaurant } from "../restaurants/restaurants.model.js";
 &nbsp;
-export const Reservation = sequelize.define("Reservation",{
+export let Reservation;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.DB_ENGINE === "postgres") {
+<span class="cstat-no" title="statement not covered" >  Reservation = sequelize.define("Reservation", {</span>
     date: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     time: {
-        type: DataTypes.TIME,
-        allowNull: false
+      type: DataTypes.TIME,
+      allowNull: false,
     },
     guests: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     status: {
-        type: DataTypes.ENUM('ACTIVE', 'CANCELLED'),
-        defaultValue: 'ACTIVE',
+      type: DataTypes.ENUM("ACTIVE", "CANCELLED"),
+      defaultValue: "ACTIVE",
     },
     restaurantId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {model: 'Restaurants', key: 'id'},
-        onDelete: 'CASCADE'
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: "Restaurants", key: "id" },
+      onDelete: "CASCADE",
     },
     userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {model: 'Users', key: 'id'},
-        onDelete: 'CASCADE',
-    }
-});
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: "Users", key: "id" },
+      onDelete: "CASCADE",
+    },
+  });
 &nbsp;
-Restaurant.hasMany(Reservation, { foreignKey: 'restaurantId', as: 'reservations' });
-User.hasMany(Reservation,       { foreignKey: 'userId',       as: 'reservations' });
-Reservation.belongsTo(Restaurant, { foreignKey: 'restaurantId' });
-Reservation.belongsTo(User,       { foreignKey: 'userId' });</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  Restaurant.hasMany(Reservation, { foreignKey: "restaurantId", as: "reservations" });</span>
+<span class="cstat-no" title="statement not covered" >  User.hasMany(Reservation,       { foreignKey: "userId",       as: "reservations" });</span>
+<span class="cstat-no" title="statement not covered" >  Reservation.belongsTo(Restaurant, { foreignKey: "restaurantId" });</span>
+<span class="cstat-no" title="statement not covered" >  Reservation.belongsTo(User,       { foreignKey: "userId" });</span>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T02:24:43.045Z
+                at 2025-05-16T05:05:44.906Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

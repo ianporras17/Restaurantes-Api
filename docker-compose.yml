@@ -10,10 +10,13 @@ services:
       - .env
     depends_on:
       - db
+      - redis
     volumes:
       - .:/app
-      - /app/node_modules 
+      - /app/node_modules
     command: npm run dev
+    networks:
+      - mongo-cluster
 
   db:
     image: postgres:15
@@ -26,6 +29,8 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - mongo-cluster
 
   pgadmin:
     image: dpage/pgadmin4
@@ -39,7 +44,75 @@ services:
       - db
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - mongo-cluster
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mongo-cluster
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - mongo-cluster
+
+  search-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: search-service
+    environment:
+      - NODE_ENV=development
+      - ELASTIC_URL=http://elasticsearch:9200
+      - SEARCH_PORT=4000
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    command: node src/search/index.js
+    depends_on:
+      - elasticsearch
+      - redis
+    networks:
+      - mongo-cluster
+
+  nginx:
+    image: nginx:1.25
+    container_name: nginx-balancer
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - search-service
+    networks:
+      - mongo-cluster
 
 volumes:
   db_data:
   pgadmin_data:
+  esdata:
+
+networks:
+  mongo-cluster:
+    external: true

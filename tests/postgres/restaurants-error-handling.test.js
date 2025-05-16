@@ -1,0 +1,52 @@
+import request   from 'supertest';
+import jwt       from 'jsonwebtoken';
+import bcrypt    from 'bcrypt';
+
+import app                   from '../../src/app.js';
+import { sequelize }         from '../../src/db/index.js';
+import { userDAO }           from '../../src/modules/users/dao/index.js';
+import { restaurantDAO }     from '../../src/modules/restaurants/dao/index.js';
+
+describe('[PG] Restaurants controller — ramas catch', () => {
+  let token;
+
+  beforeAll(async () => {
+    await sequelize.sync({ force: true });
+    const u = await userDAO.create({
+      email: 'rest@pg.com',
+      password: await bcrypt.hash('123', 10),
+      role: 'Admin',
+    });
+    token = jwt.sign({ id: u.id, role: u.role }, process.env.JWT_SECRET);
+  });
+
+  afterEach(() => jest.restoreAllMocks());
+  afterAll(async () => { await sequelize.close(); });
+
+  it('POST /restaurants → 500 si restaurantDAO.create lanza', async () => {
+    jest.spyOn(restaurantDAO, 'create').mockImplementation(() => {
+      throw new Error('boom');
+    });
+
+    const res = await request(app)
+      .post('/restaurants')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'X', address: 'Y', phone: '1' });
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body.error).toBe('Error al conectar con la base de datos');
+  });
+
+  it('GET /restaurants → 500 si restaurantDAO.findAllRestaurant lanza', async () => {
+    jest.spyOn(restaurantDAO, 'findAllRestaurant').mockImplementation(() => {
+      throw new Error('fail');
+    });
+
+    const res = await request(app)
+      .get('/restaurants')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body.error).toBe('Error al conectar a la data base');
+  });
+});

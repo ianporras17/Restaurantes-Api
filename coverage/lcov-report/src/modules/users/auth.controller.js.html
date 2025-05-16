@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -117,45 +117,22 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -165,11 +142,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -186,83 +165,74 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { User } from "./users.model.js";
-import bcrypt from "bcrypt";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { userDAO } from "./dao/index.js";
 &nbsp;
 export const registerUser = async (req, res) =&gt; {
+  const { email, password, role } = req.body;
 &nbsp;
-    /*  
-        Función que se necarga de crear un usuario nuevo, obtiene el emain y la password
-        que le dimos en el req.body y con sequelice crea el ususario y lo pasa a cliente
-        para guardarlo, en caso de error pues lo mostrará.
-    
-    */
+  if (!email || !password || !role) {
+    return res.status(400).json({ error: "Faltan campos obligatorios" });
+  }
 &nbsp;
-    const {email, password, role} = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await userDAO.create({ email, password: hashedPassword, role });
 &nbsp;
-    if (!email || !password || !role){
-        return res.status(400).json({error: "Faltan campos oblogatorios"});
-&nbsp;
+    return res.status(201).json({ message: "Usuario creado correctamente" , users: user});
+  } catch (err) {
+    if (err.code === 11000 || err.name === "SequelizeUniqueConstraintError") {
+      return res.status(400).json({ error: "Correo ya registrado" });
     }
-    
-&nbsp;
-    try{
-        const hashedPassword = await bcrypt.hash(password, 10);
-&nbsp;
-        const nuevoUsuario = await User.create({email, password: hashedPassword, role});
-        
-        return res.status(201).json({message: "Usuario creado correctamente"});
-&nbsp;
-    }catch (err) {
-&nbsp;
-        if(err.name == "SequelizeUniqueConstraintError"){
-            return res.status(400).json({error: "correo ya registrado"});
-        }
-        console.error(err)
-        return res.status(500).json({error: "Error al registrar el usuario"});
+      console.error(err);
+      return res.status(500).json({ error: "Error al registrar el usuario" });
     }
-}
+};
 &nbsp;
-export const loginUser = async (req, res) =&gt;{
-    const {email, password} = req.body;
+export const loginUser = async (req, res) =&gt; {
+  const { email, password } = req.body;
 &nbsp;
-    if(!email || !password){
-        return res.status(400).json({error: "Debe ingresar correo y contraseña"});
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ error: "Debe ingresar correo y contraseña" });
+  }
+&nbsp;
+  try {
+    const usuario = await userDAO.findByEmail(email);
+    if (!usuario) {
+      return res.status(401).json({ error: "Datos incorrectos" });
     }
 &nbsp;
-    try{
-        const usuario = await User.findOne({where: {email}});
-        if (!usuario){
-            return res.status(401).json({error: "Datos incorrectos"});
-        }
-&nbsp;
-        const valid = await bcrypt.compare(password, usuario.password);
-        if(!valid){
-            return res.status(401).json({error: "Datos incorrectos"});
-        }
-&nbsp;
-        const payload = {id: usuario.id, email: usuario.email, role: usuario.role};
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1h"});
-&nbsp;
-        return res.json({ token });
-    }catch(err){
-        return res.status(500).json({error: "Error al conectar el servidor"})
+    const valid = await bcrypt.compare(password, usuario.password);
+    if (!valid) {
+      return res.status(401).json({ error: "Datos incorrectos" });
     }
 &nbsp;
-}</pre></td></tr></table></pre>
+    const payload = { id: usuario.id, email: usuario.email, role: usuario.role };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+&nbsp;
+    return res.json({ token });
+  } catch (err) {
+    return res.status(500).json({ error: "Error al conectar con el servidor" });
+  }
+};</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T02:24:43.045Z
+                at 2025-05-16T12:14:08.716Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

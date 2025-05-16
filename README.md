@@ -7,16 +7,7 @@ API REST para la gestión de reservas en restaurantes, implementando autenticaci
 [![CI/CD](https://github.com/ianporras17/Restaurantes-Api/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/ianporras17/Restaurantes-Api/actions)
 [![Docker Image](https://img.shields.io/badge/ghcr.io-restaurantes--api-blue?logo=docker)](https://github.com/ianporras17/Restaurantes-Api/pkgs/container/restaurantes-api)
 
-API REST para la gestión de reservas en restaurantes, implementando:
 
-- ✅ Autenticación con JWT  
-- ✅ PostgreSQL + Sequelize  
-- ✅ Contenedorización con Docker  
-- ✅ Pruebas unitarias e integración con cobertura ≥ 90%  
-- ✅ CI/CD con GitHub Actions  
-- ✅ Imagen Docker publicada automáticamente en GHCR  
-
----
 
 ## ⚙️ Tecnologías utilizadas
 
@@ -66,12 +57,8 @@ Este proyecto incluye pruebas unitarias y de integración con Jest y Supertest.
 ### ▶️ Ejecutar pruebas con cobertura
 
 ```bash
-npm test coverage
+npm test
 ```
-
-✔️ Se usa SQLite en memoria durante los tests (`NODE_ENV=test`)  
-✔️ No necesitas levantar PostgreSQL
-
 ---
 
 ## 🐳 Imagen Docker pública (GHCR)
