@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # ---------- SHARD 1 (ReplicaSet) ----------
   mongo1:
     image: mongo:6.0
     container_name: mongo1
@@ -39,7 +38,6 @@ services:
     command: mongod --replSet rs0 --shardsvr --port 27017 --bind_ip_all
     networks: [ mongo-cluster ]
 
-  # ---------- CONFIG SERVERS (ReplicaSet) ----------
   configsvr1:
     image: mongo:6.0
     container_name: configsvr1
@@ -70,7 +68,7 @@ services:
       - ./data/config3:/data/db
     networks: [ mongo-cluster ]
 
-  # ---------- MONGOS ----------
+
   mongos:
     image: mongo:6.0
     container_name: mongos
@@ -84,7 +82,6 @@ services:
     depends_on: [ configsvr1, configsvr2, configsvr3 ]
     networks: [ mongo-cluster ]
 
-  # ---------- FASE 1 : inicia configReplSet ----------
   init-configsvr:
     image: mongo:6.0
     container_name: init-configsvr
