@@ -440,16 +440,3 @@ LH:4
 BRF:0
 BRH:0
 end_of_record
-TN:
-SF:src\utils\esClient.js
-FNF:0
-FNH:0
-DA:3,14
-DA:5,14
-LF:2
-LH:2
-BRDA:6,0,0,14
-BRDA:6,0,1,0
-BRF:2
-BRH:1
-end_of_record

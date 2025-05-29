@@ -49,7 +49,9 @@ export default {
     'src/search/controller.js',
     'src/search/router.js',
     'src/utils/cache.js',
-    'src/utils/indexers.js'
+    'src/utils/indexers.js',
+    'src/utils/esClient.js'
+
 
   ],
 };

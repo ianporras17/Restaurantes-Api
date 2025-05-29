@@ -1,0 +1,19 @@
+{
+  "name": "search-service",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.12.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.3",
+    "pg": "^8.15.6",
+    "pg-hstore": "^2.3.4",
+    "redis": "^5.0.1",
+    "search-service": "file:",
+    "sequelize": "^6.37.7"
+  }
+}
